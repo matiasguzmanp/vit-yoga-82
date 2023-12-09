@@ -1,4 +1,5 @@
 import os
+from PIL import Image
 
 def get_all_file_names(folder_path: str):
     file_names = []
@@ -23,6 +24,24 @@ def download_and_store(file_path: str, output_folder: str):
         print(f"Image could not be downloaded: {e}")
 
 
+def is_image(file_path):
+    try:
+        with Image.open(file_path):
+            return True
+    except (IOError, SyntaxError):
+        return False
+
+def filter_images(directory):
+    for filename in os.listdir(directory):
+      file_path = os.path.join(directory, filename)
+      for image_name in os.listdir(file_path):
+        img_path = os.path.join(file_path, image_name)
+        if os.path.isfile(img_path) and is_image(img_path):
+            print(f"Valid image: {img_path}")
+        else:
+          print(f"Invalid image: {img_path}")
+          print("Deleting...")
+          os.remove(img_path)
 
 if __name__ == "__main__":
     folder_path = "./Yoga-82/yoga_dataset_links"
@@ -35,3 +54,6 @@ if __name__ == "__main__":
 
     for file in files:
         download_and_store(file, output_folder)
+    # Replace 'your_directory_path' with the path to your directory containing image files
+    directory_path = './yoga_dataset/'
+    filter_images(directory_path)
