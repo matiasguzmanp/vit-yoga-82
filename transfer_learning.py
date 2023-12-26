@@ -43,41 +43,48 @@ def fine_tune_model_pipeline(hyperparameters, train_mean, train_std, class_weigh
 
 if __name__ == "__main__":
    
-   transform = transforms.Compose([
-    transforms.Resize((128, 128)),
-    transforms.ToTensor()
-])
+   
+  """
+  In this example we load a checkpoint trained for 20 classes and do transfer learning
+  to 82 classes
+  
+  """
+   
+  transform = transforms.Compose([
+      transforms.Resize((128, 128)),
+      transforms.ToTensor()
+  ])
 
-dataset = Yoga82(train_val_test="train", csv_path="./train_dataframe.csv", transform=transform, n_classes=82)
+  dataset = Yoga82(train_val_test="train", csv_path="./train_dataframe.csv", transform=transform, n_classes=82)
 
-loader = DataLoader(dataset,
-                        batch_size=10,
-                        num_workers=0,
-                        shuffle=False,
-                        drop_last=False)
+  loader = DataLoader(dataset,
+                          batch_size=10,
+                          num_workers=0,
+                          shuffle=False,
+                          drop_last=False)
 
-mean, std = mean_and_std_calculator(loader)
-weights = compute_weights(loader)
+  mean, std = mean_and_std_calculator(loader)
+  weights = compute_weights(loader)
 
-weights_path = "/content/drive/MyDrive/yoga-82/vit_checkpoint_6_20.pth"
+  weights_path = "path-to-pretrained-model"
 
 
-config = dict(
-    chw = (3,128,128),
-    patch_size = 8,
-    D = 768,
-    n_classes = 20,
-    heads = 12,
-    layers = 12,
-    epochs = 5,
-    lr = 1e-5,
-    batch_size = 32,
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    )
+  config = dict(
+      chw = (3,128,128),
+      patch_size = 8,
+      D = 768,
+      n_classes = 20,
+      heads = 12,
+      layers = 12,
+      epochs = 5,
+      lr = 1e-5,
+      batch_size = 32,
+      device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+      )
 
-model, train_loss, val_loss, conf_mat, acc = fine_tune_model_pipeline(config,
-                                                  train_mean = mean,
-                                                  train_std = std,
-                                                  class_weights = weights,
-                                                  weights_path=weights_path,
-                                                  new_n_classes=82)
+  model, train_loss, val_loss, conf_mat, acc = fine_tune_model_pipeline(config,
+                                                    train_mean = mean,
+                                                    train_std = std,
+                                                    class_weights = weights,
+                                                    weights_path=weights_path,
+                                                    new_n_classes=82)
