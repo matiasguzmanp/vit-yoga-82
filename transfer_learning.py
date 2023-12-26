@@ -12,7 +12,7 @@ from torch.utils.data import DataLoader
 import torchvision.transforms as transforms
 import wandb
 
-def fine_tune_model_pipeline(hyperparameters, train_mean, train_std, class_weights, weights_path, new_n_classes):
+def transfer_learning_model_pipeline(hyperparameters, train_mean, train_std, class_weights, weights_path, new_n_classes):
     # tell wandb to get started
     with wandb.init(project="vit-yoga82-6to82", config=hyperparameters):
       # access all HPs through wandb.config, so logging matches execution!
@@ -82,7 +82,7 @@ if __name__ == "__main__":
       device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
       )
 
-  model, train_loss, val_loss, conf_mat, acc = fine_tune_model_pipeline(config,
+  model, train_loss, val_loss, conf_mat, acc = transfer_learning_model_pipeline(config,
                                                     train_mean = mean,
                                                     train_std = std,
                                                     class_weights = weights,
