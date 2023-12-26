@@ -6,3 +6,5 @@ This repository is made to implement a Vision Transformer with Yoga-82 dataset.
  - Visit this [link](https://sites.google.com/view/yoga-82/home) and download the datase
 
 ### How to use the model for prediction
+
+See `predict.py`
