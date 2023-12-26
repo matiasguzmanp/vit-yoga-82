@@ -7,4 +7,4 @@ This repository is made to implement a Vision Transformer with Yoga-82 dataset.
 
 ### How to use the model for prediction
 
-See `predict.py`
+See `vit-predict-example.py`
